@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Example Project Report</title>
+
+    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      <header>
+        <h1>Sam Starnes' Personal Web Page</h1>
+      </header>
+
+      <main>
+        <section>
+          <h2>About Me</h2>
+          <p class="black">
+            My name is Sam Starnes and welcome to my web page, I am currently a sneior at th University of Iowa and will obtain a degree in Business Analytics and Information Systems come the end of this spring semester. I will also graduate with a minor in Sport and Recreation Management, which i hope to be able to put to good use in my future.
+          </p>
+          <p>
+            Some more about me, I am from Cedar Rapids, a short 45-minute drive from the University of Iowa and I will be moving to Chicago this summer where I will start my full time job. I have always wanted to live in Chicago and a big part of this is my Chicago sports fandom, I support all Chicago pro teams apart from the White Sox, which has led to a multitude of dissapointing seasons throughout my lifetime.
+          </p>
+        </section>
+
+        <section>
+          <h2 id="data">2. Data</h2>
+          <p>
+            This project uses two primary sources of data: Metacritic's game
+            critic and game player review scores of different games and VGChartz
+            data about video game sales.
+          </p>
+
+          <h3>2.1 Review Scores</h3>
+          <p>
+            I collected data from Metacritic, which contained user (user score)
+            and critic (meta score) review scores for each game.
+          </p>
+          <p>
+            Metacritic's data was found on 186 different web pages. I wrote a
+            web crawling script to collect all data across these 186 pages. I
+            collected the game title, summary, platform, user score, meta score,
+            and release date for 18,526 games. Some of the results were the same
+            game that was released on different platforms, which is essential to
+            consider when I begin merging the data. I created a data frame which
+            is contained in the Metacritic.csv file in the project folder. The
+            web crawling script that I wrote is contained in the metacritic.R
+            file in the project folder.
+          </p>
+
+          <p>
+            The data didn't need much cleaning; however, to make the platform
+            match with the VGChartz data, I created a dictionary to convert
+            Metacritic's platform data to match VGChartz. This cleaning was done
+            in the file combining_vgs.R.
+          </p>
+
+          <h3>2.2 Video Game Sales</h3>
+          <p>
+            The website VGChartz provides sales data about the number of units
+            of each game/platform combination sold. The information was
+            contained in 1,249 web pages. Due to the extensive nature of the
+            data, I decided to break the web crawling results into six different
+            CSV files (VGChartz_0 - 5.csv), all contained in the project folder.
+            The web crawling script is contained in the vgchartz.R file in the
+            project folder. I collected the game, platform, release date,
+            publisher, and sales data from PAL, Japan, and North America as well
+            as total game sales for 62,398 games. Like the Metacritic data, some
+            of these games were released on multiple platforms, which count as a
+            unique observation in the data. Another interesting thing to note is
+            that series were counted in this data frame alongside their
+            individual counterparts. For example, Super Mario is counted as a
+            series, but each entry in the series is also contained in the
+            dataset. This was handled in the cleaning of the data. In cleaning
+            the data, I merged all six VGChartz .csv files into one complete
+            file using row bind to build a complete data frame. I also removed
+            unnecessary columns, trimmed the white space on the title, and
+            returned only the distinct values of the dataset. When I read the
+            CSV into the script, I created NA values where data was missing. I
+            also removed the game series by filtering them out during data
+            cleaning. This cleaning was done in the file combining_vgs.R.
+          </p>
+          <h3>2.3 Combining Reviews and Sales</h3>
+          <p>
+            Since both data sets included the same game title multiple times
+            based on the platform, I had to merge based on both the game title
+            and platform. Both data sets are also vastly different in the number
+            of observations. I decided to create two separate data sets in
+            merging. One data set is the intersection of the data and only
+            contains data that appears in both data sets. The other data set,
+            called the union, contains all rows from both data sets. All this
+            work was done in the combining_vgs.R file in the project folder.
+            Next I imported both data frames into the cleaning_vgs.R file in the
+            project folder for further cleaning.
+          </p>
+          <p>
+            Since the differentiator between both data frames is their number of
+            rows and most of my cleaning was regarding the columns, I created a
+            function to iterate over both data sets to clean them. This cleaning
+            included trimming the white space on the summary and publisher,
+            turning the sales data into numeric, and adding the platform,
+            publisher, and title as factors. I also turned all the release dates
+            into a “Month, Year” format and combined the release date from
+            VGChartz and Metacritic into one column. Next, I dropped all sales
+            data except North America sales and total sales. I also dropped the
+            extra release date column, and the index columns. I exported these
+            datasets to VGSales_union.csv and VGSales_intersect.csv,
+            respectively. The union had 68,288 observations, and the intersect
+            had 12,288 observations. A description of each variable is contained
+            in Table 1.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Type</th>
+                <th>Source</th>
+                <th>Description</th>
+              </tr>
+
+          <ol>
+            <li>
+              Is there a strong correlation between a game's review score and
+              its sales? Is the meta score or the user score a better predictor
+              of a game's sales?
+            </li>
+            <ol>
+              <li>
+                There is limited correlation between review scores and sales.
+                But while the correlation isn't very strong, it does appear meta
+                score is a better predictor of sales than the user score.
+              </li>
+            </ol>
+            <li>
+              Have the total sales of games seen an increase over the years?
+            </li>
+            <ol>
+              <li>
+                There is some correlation between release date and number of
+                games released, but it is not especially strong. There was a
+                peak in the number of games released around 2010 but since there
+                has been a decline.
+              </li>
+            </ol>
+            <li>
+              Which publishers have had the highest sales over the past ten
+              years? Is there a difference between those with high sales in
+              North America and those with high total sales?
+            </li>
+            <ol>
+              <li>
+                The top ten publishers are listed above in Table 3. The same ten
+                publishers are present in both total sales and North American
+                sales, just in a different order. Nintendo is solidly in first
+                place with 1.9 billion games sold followed by Activision at
+                number two with 727 million units sold. North American sales
+                accounts for 40 - 60% of total sales making this region a
+                significant contributor to sales success for game publishers.
+              </li>
+            </ol>
+            <li>
+              Is the console on which a game is released strongly correlated to
+              its ratings? Specifically, are there certain video game consoles
+              that have the highest average ratings of games?
+            </li>
+            <ol>
+              <li>
+                The variables needed to answer this question were not present in
+                the collected data. As noted below, this question would be an
+                opportunity for further work on this project.
+              </li>
+            </ol>
+          </ol>
+
+          <p>
+            This project has several limitations, including the lack of review
+            scores for games released before the mid-90s, the improper release
+            dates of some games, and the lack of information about the video
+            game consoles. Future work on this project could include finding
+            more sources to create a more complete dataset, analyzing the
+            purchase of different video game consoles to see if the spikes in
+            new video game releases coincide with more people buying video game
+            consoles, and analyzing whether more time in between game releases
+            for a publisher really means a better game (higher sales and review
+            scores).
+          </p>
+        </section>
+      </main>
+      <footer>&copy; Sam Starnes</footer>
+    </div>
+    <!-- close container div -->
+  </body>
+</html>
