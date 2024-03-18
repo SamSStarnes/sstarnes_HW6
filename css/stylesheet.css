@@ -1,12 +1,15 @@
-
 body {
-    background-color: offwhite;
+    background-color: #f5f5f5;
     font-family: Arial, sans-serif;
     font-size: 1.1rem;
   }
-  
+  img {
+    border: #ffcd00;
+  }
+
   h1 {
     font-size: 2rem;
+    color: #ffcd00;
   }
   
   h2 {
@@ -14,7 +17,7 @@ body {
   }
   
   header {
-    background-color: #323232;
+    background-color: #000000;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -26,7 +29,7 @@ body {
   }
   
   footer {
-    background-color: #323232;
+    background-color: #f5f5f5;
   }
   
   section {
